@@ -5,6 +5,7 @@ import fr.abes.kbart2kafka.exception.IllegalFileFormatException;
 import fr.abes.kbart2kafka.exception.IllegalPackageException;
 import fr.abes.kbart2kafka.exception.IllegalProviderException;
 import fr.abes.kbart2kafka.repository.ProviderRepository;
+import fr.abes.kbart2kafka.service.EmailService;
 import fr.abes.kbart2kafka.service.FileService;
 import fr.abes.kbart2kafka.service.ProviderPackageService;
 import fr.abes.kbart2kafka.utils.CheckFiles;
@@ -30,10 +31,13 @@ public class Kbart2kafkaApplication implements CommandLineRunner {
 
     private final ProviderRepository providerRepository;
 
-    public Kbart2kafkaApplication(FileService service, ProviderPackageService providerPackageService, ProviderRepository providerRepository) {
+    private final EmailService emailService;
+
+    public Kbart2kafkaApplication(FileService service, ProviderPackageService providerPackageService, ProviderRepository providerRepository, EmailService emailService) {
         this.service = service;
         this.providerPackageService = providerPackageService;
         this.providerRepository = providerRepository;
+        this.emailService = emailService;
     }
 
     public static void main(String[] args) {
@@ -62,6 +66,7 @@ public class Kbart2kafkaApplication implements CommandLineRunner {
                 checkExistingPackage(tsvFile.getName());
             } catch (IllegalFileFormatException | IllegalProviderException | IllegalPackageException | IllegalDateException e) {
                 log.error(e.getMessage());
+                emailService.sendKbartFileReadError(tsvFile.getName(), "Erreur de lecture du fichier " + tsvFile.getName() + " : " + e.getMessage());
                 throw new RuntimeException(e);
             }
             service.loadFile(tsvFile, kbartHeader);

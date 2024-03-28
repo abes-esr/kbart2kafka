@@ -40,12 +40,15 @@ public class FileService {
     private int nbThread;
     private final KafkaTemplate<String, String> kafkaTemplate;
 
+    private final EmailService emailService;
+
     private final ObjectMapper mapper;
     ExecutorService executor;
 
-    public FileService(KafkaTemplate<String, String> kafkaTemplate, ObjectMapper mapper) {
+    public FileService(KafkaTemplate<String, String> kafkaTemplate, ObjectMapper mapper, EmailService emailService) {
         this.kafkaTemplate = kafkaTemplate;
         this.mapper = mapper;
+        this.emailService = emailService;
     }
 
     @PostConstruct
@@ -66,6 +69,7 @@ public class FileService {
     private void executeMultiThread(File fichier, String kbartHeader) throws IOException {
         // Compteur du nombre de lignes dans le kbart
         int lineCounter = 0;
+        List<String> errorList = new ArrayList<>();
         try (BufferedReader buff = new BufferedReader(new FileReader(fichier))) {
             List<String> fileContent = buff.lines().toList();
             Integer nbLignesFichier = fileContent.size() - 1;
@@ -96,15 +100,17 @@ public class FileService {
                             });
                         } catch (JsonProcessingException e) {
                             sendErrorToKafka("erreur de mapping des données au chargement de la ligne " + finalLineCounter, e, fichier.getName());
+                            errorList.add("Erreur de mapping des données au chargement de la ligne " + finalLineCounter + " : " + e.getMessage());
                             throw new RuntimeException(e);
                         }
                     });
                 }
             }
-
         } catch (IOException ex) {
             sendErrorToKafka("erreur de lecture du fichier", ex, fichier.getName());
+            errorList.add("Erreur de lecture du fichier : " + ex.getMessage());
         } finally {
+            if (!errorList.isEmpty()) emailService.sendKbartFileReadError(fichier.getName(), errorList.toString());
             executor.shutdown();
         }
     }
