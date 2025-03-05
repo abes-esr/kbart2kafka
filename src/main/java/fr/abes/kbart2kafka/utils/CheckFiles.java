@@ -4,10 +4,7 @@ import fr.abes.kbart2kafka.exception.IllegalFileFormatException;
 import fr.abes.kbart2kafka.exception.IllegalProviderException;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
@@ -112,9 +109,19 @@ public class CheckFiles {
             isFileWithTSVExtension(file);
             detectTabulations(file);
             detectHeaderPresence(header, file, isBypassOptionPresent);
+            checkEmptyFile(file);
             checkPublicationTitle(file);
         } else {
             throw new IllegalFileFormatException("Le fichier "+file.getName()+" n'est pas trouvable");
+        }
+    }
+
+    public static void checkEmptyFile(File file) throws IOException, IllegalFileFormatException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            reader.readLine(); // lecture à vide de la ligne d'en-tête
+            String line = reader.readLine();
+            if (line == null || line.isEmpty())
+                throw new IllegalFileFormatException("Le fichier est vide !");
         }
     }
 

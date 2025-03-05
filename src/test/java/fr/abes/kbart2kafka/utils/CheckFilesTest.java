@@ -147,7 +147,7 @@ class CheckFilesTest {
         file7.deleteOnExit();
     }
     @Test
-    void detectOfHeaderPresence2() throws IOException, IllegalFileFormatException {
+    void detectOfHeaderPresence2() throws IOException {
         String header = "testA\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY";
 
         // Test d'une erreur avec header à 27 colonnes et best ppn
@@ -156,6 +156,19 @@ class CheckFilesTest {
         IllegalFileFormatException erreur7 = Assertions.assertThrows(IllegalFileFormatException.class, () -> CheckFiles.detectHeaderPresence(header, file7, false));
         Assertions.assertEquals(erreur7.getMessage(),"L'en tete du fichier est incorrecte. L’en tête devrait être comme ceci : testA\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY et best_ppn");
         file7.deleteOnExit();
+    }
+
+    @Test
+    void testEmptyFile() throws IOException, IllegalFileFormatException {
+        File file = new File("test.tsv");
+        FileUtils.writeStringToFile(file, "testA\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY", StandardCharsets.UTF_8, true);
+        Assertions.assertThrows(IllegalFileFormatException.class, () -> CheckFiles.checkEmptyFile(file));
+        FileUtils.writeStringToFile(file, "", StandardCharsets.UTF_8, true);
+        Assertions.assertThrows(IllegalFileFormatException.class, () -> CheckFiles.checkEmptyFile(file));
+
+        FileUtils.writeStringToFile(file, "testA\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY\n", StandardCharsets.UTF_8, false);
+        FileUtils.writeStringToFile(file, "tejlksdjmflksjfmldf", StandardCharsets.UTF_8, true);
+        CheckFiles.checkEmptyFile(file);
     }
 
     @Test
