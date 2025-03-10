@@ -67,13 +67,14 @@ public class FileService {
             log.debug("Début d'envoi de " + nbLignesFichier + " lignes du fichier");
             AtomicInteger cpt = new AtomicInteger(0);
             AtomicBoolean isOnError = new AtomicBoolean(false);
+            Boolean isForcedOrBypassed = fichier.getName().contains("FORCE") || fichier.getName().contains("BYPASS");
             fileContent.stream().skip(1).forEach(ligneKbart -> {
                 cpt.incrementAndGet();
                 ThreadContext.put("package", fichier.getName() + ";" + cpt.get());
                 String[] tsvElementsOnOneLine = ligneKbart.split("\t");
                 try {
                     CheckFiles.isValidUtf8(ligneKbart);
-                    kbartsToSend.add(mapper.writeValueAsString(constructDto(tsvElementsOnOneLine, cpt.get(), nbLignesFichier)));
+                    kbartsToSend.add(mapper.writeValueAsString(constructDto(tsvElementsOnOneLine, cpt.get(), nbLignesFichier, isForcedOrBypassed)));
                 } catch (IllegalDateException | IllegalFileFormatException | JsonProcessingException e) {
                     log.error("Erreur dans le fichier en entrée à la ligne " + cpt.get() + " : " + e.getMessage());
                     isOnError.set(true);
@@ -113,39 +114,45 @@ public class FileService {
      * @param line ligne en entrée
      * @return Un objet DTO initialisé avec les informations de la ligne
      */
-    public LigneKbartDto constructDto(String[] line, Integer ligneCourante, Integer nbLignesFichier) throws IllegalFileFormatException, IllegalDateException {
+    public LigneKbartDto constructDto(String[] line, Integer ligneCourante, Integer nbLignesFichier, Boolean isForcedOrBypassed) throws IllegalFileFormatException, IllegalDateException {
         if ((line.length > 26) || (line.length < 25)) {
-            throw new IllegalFileFormatException("nombre de colonnes incorrect");
+            throw new IllegalFileFormatException("Nombre de colonnes incorrect");
         }
         LigneKbartDto kbartLineInDtoObject = new LigneKbartDto();
         kbartLineInDtoObject.setNbCurrentLines(ligneCourante - 1);
         kbartLineInDtoObject.setNbLinesTotal(nbLignesFichier);
         kbartLineInDtoObject.setPublication_title(line[0]);
+        if(line[1].equals(line[2]) && !isForcedOrBypassed){
+            throw new IllegalFileFormatException("Les champs PRINT_IDENTIFIER et ONLINE_IDENTIFIER sont identiques");
+        }
         kbartLineInDtoObject.setPrint_identifier(line[1]);
         kbartLineInDtoObject.setOnline_identifier(line[2]);
         kbartLineInDtoObject.setDate_first_issue_online(Utils.reformatDateKbart(line[3]));
-        if(!line[4].isEmpty() && !line[4].matches("\\d+")){
+        if((!line[4].isEmpty() && !line[4].matches("\\d+")) && !isForcedOrBypassed){
             throw new IllegalFileFormatException("La valeur de NUM_FIRST_VOL_ONLINE n'est pas un nombre");
         }
         kbartLineInDtoObject.setNum_first_vol_online(line[4]);
-        if(!line[5].isEmpty() && !line[5].matches("\\d+")){
+        if((!line[5].isEmpty() && !line[5].matches("\\d+")) && !isForcedOrBypassed){
             throw new IllegalFileFormatException("La valeur de NUM_FIRST_ISSUE_ONLINE n'est pas un nombre");
         }
         kbartLineInDtoObject.setNum_first_issue_online(line[5]);
         kbartLineInDtoObject.setDate_last_issue_online(Utils.reformatDateKbart(line[6]));
-        if(!line[7].isEmpty() && !line[7].matches("\\d+")){
+        if((!line[7].isEmpty() && !line[7].matches("\\d+")) && !isForcedOrBypassed){
             throw new IllegalFileFormatException("La valeur de NUM_LAST_VOL_ONLINE n'est pas un nombre");
         }
         kbartLineInDtoObject.setNum_last_vol_online(line[7]);
-        if(!line[8].isEmpty() && !line[8].matches("\\d+")){
+        if((!line[8].isEmpty() && !line[8].matches("\\d+")) && !isForcedOrBypassed){
             throw new IllegalFileFormatException("La valeur de NUM_LAST_ISSUE_ONLINE n'est pas un nombre");
         }
         kbartLineInDtoObject.setNum_last_issue_online(line[8]);
-        if(line[9].isEmpty()){
+        if(line[9].isEmpty() && !isForcedOrBypassed){
             throw new IllegalFileFormatException("La valeur de TITLE_URL est vide");
         }
-        kbartLineInDtoObject.setTitle_url(line[9]);
+        kbartLineInDtoObject.setTitle_url(line[9].trim());
         kbartLineInDtoObject.setFirst_author(line[10]);
+        if(line[11].isEmpty() && !isForcedOrBypassed){
+            throw new IllegalFileFormatException("La valeur de TITLE_ID est vide");
+        }
         kbartLineInDtoObject.setTitle_id(line[11]);
         kbartLineInDtoObject.setEmbargo_info(line[12]);
         if(!line[13].equals("fulltext")){
