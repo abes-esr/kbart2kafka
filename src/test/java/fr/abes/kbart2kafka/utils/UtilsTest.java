@@ -83,8 +83,29 @@ class UtilsTest {
         Assertions.assertEquals("2024-03-01", Utils.reformatDateKbart(date));
         date = "2024";
         Assertions.assertEquals("2024-01-01", Utils.reformatDateKbart(date));
+
         date = "jklsdfhlksjf";
         String finalDate = date;
         Assertions.assertThrows(IllegalDateException.class, () -> Utils.reformatDateKbart(finalDate));
+
+        date = "2024-02-30"; // 30 fev existe pas
+        String finalDate1 = date;
+        Assertions.assertThrows(IllegalDateException.class, () -> Utils.reformatDateKbart(finalDate1));
+
+        date = "202";
+        String finalDate2 = date;
+        Assertions.assertThrows(IllegalDateException.class, () -> Utils.reformatDateKbart(finalDate2));
     }
+
+    @Test
+    @DisplayName("Test before date")
+    void beforeDate() {
+        String date  = "2024-03-03";
+        String otherDate = "2025-03-03";
+        Assertions.assertTrue(Utils.isDateBeforeOtherDate(date, otherDate));
+        Assertions.assertFalse(Utils.isDateBeforeOtherDate(otherDate, date));
+        Assertions.assertFalse(Utils.isDateBeforeOtherDate(date, date));
+    }
+
+
 }
