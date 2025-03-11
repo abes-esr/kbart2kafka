@@ -7,7 +7,9 @@ import fr.abes.kbart2kafka.exception.IllegalProviderException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.FileSystems;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -65,17 +67,40 @@ public class Utils {
             return "";
         Matcher matcher = Pattern.compile("(\\d{4}-\\d{2}-\\d{2})", Pattern.CASE_INSENSITIVE).matcher(dateToFormat);
         if (matcher.find()) {
-            return dateToFormat;
+            return checkDate(dateToFormat);
         }
         matcher = Pattern.compile("(\\d{4}-\\d{2})", Pattern.CASE_INSENSITIVE).matcher(dateToFormat);
         if (matcher.find()) {
-            return dateToFormat + "-01";
+            return checkDate(dateToFormat + "-01");
         }
         matcher = Pattern.compile("(\\d{4})", Pattern.CASE_INSENSITIVE).matcher(dateToFormat);
         if (matcher.find()) {
-            return dateToFormat + "-01-01";
+            return checkDate(dateToFormat + "-01-01");
         }
         throw new IllegalDateException("Format de date non reconnu, la date doit être au format YYYY ou YYYY-MM ou YYYY-MM-DD");
+    }
+
+    private static String checkDate(String dateToCheck) throws IllegalDateException {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            sdf.setLenient(false);
+            Date parsedDate = sdf.parse(dateToCheck);
+
+            // Obtenir la date actuelle (sans l'heure)
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            Date today = cal.getTime();
+            // Vérifier si la date est dans le futur
+            if (parsedDate.after(today)) {
+                throw new IllegalDateException("La date fournie est invalide : " + dateToCheck);
+            }
+            return dateToCheck;
+        } catch (ParseException e) {
+            throw new IllegalDateException("La date fournie est invalide : " + dateToCheck);
+        }
     }
 
     public static String extractFilename(String path) {
@@ -84,5 +109,16 @@ public class Utils {
         return path;
     }
 
+    public static Boolean isDateBeforeOtherDate(String date, String otherDate) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date1 = sdf.parse(date);
+            Date date2 = sdf.parse(otherDate);
+            return date1.before(date2);
+        } catch (ParseException e) {
+            // Handle parsing error (e.g., invalid date format)
+            return false; // Or throw an exception, depending on your needs.
+        }
+    }
 
 }

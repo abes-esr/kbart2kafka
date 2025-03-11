@@ -182,6 +182,16 @@ public class FileService {
         if (line.length == 26) {
             kbartLineInDtoObject.setBestPpn(line[25]);
         }
+
+        if (kbartLineInDtoObject.getPublication_type().equals("serial") && kbartLineInDtoObject.getDate_first_issue_online().isEmpty() && !isForcedOrBypassed){
+            throw new IllegalFileFormatException("DATE_FIRST_ISSUE_ONLINE est obligatoire si PUBLICATION_TYPE est serial");
+        }
+
+        if( !kbartLineInDtoObject.getDate_first_issue_online().isEmpty() &&
+                !kbartLineInDtoObject.getDate_last_issue_online().isEmpty() &&
+                Utils.isDateBeforeOtherDate(kbartLineInDtoObject.getDate_last_issue_online(),kbartLineInDtoObject.getDate_first_issue_online())){
+            throw new IllegalFileFormatException("DATE_LAST_ISSUE_ONLINE ne peut pas être antérieure à DATE_FIRST_ISSUE_ONLINE");
+        }
         return kbartLineInDtoObject;
 
     }

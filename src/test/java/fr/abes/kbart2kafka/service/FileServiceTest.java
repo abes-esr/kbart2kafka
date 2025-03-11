@@ -38,10 +38,10 @@ class FileServiceTest {
                 "Le titre de publication",
                 "0001-4842",
                 "1520-4898",
-                "1996-01-10",
+                "1996-01",
                 "",
                 "2",
-                "1996-01",
+                "1996-01-11",
                 "3",
                 "4",
                 "https://pubs.acs.org/loi/achre4",
@@ -69,10 +69,10 @@ class FileServiceTest {
         Assertions.assertEquals("Le titre de publication", lineOut.getPublication_title());
         Assertions.assertEquals("0001-4842", lineOut.getPrint_identifier());
         Assertions.assertEquals("1520-4898", lineOut.getOnline_identifier());
-        Assertions.assertEquals("1996-01-10", lineOut.getDate_first_issue_online());
+        Assertions.assertEquals("1996-01-01", lineOut.getDate_first_issue_online());
         Assertions.assertEquals("",lineOut.getNum_first_vol_online());
         Assertions.assertEquals("2", lineOut.getNum_first_issue_online());
-        Assertions.assertEquals("1996-01-01", lineOut.getDate_last_issue_online());
+        Assertions.assertEquals("1996-01-11", lineOut.getDate_last_issue_online());
         Assertions.assertEquals("3", lineOut.getNum_last_vol_online());
         Assertions.assertEquals("4", lineOut.getNum_last_issue_online());
         Assertions.assertEquals("https://pubs.acs.org/loi/achre4", lineOut.getTitle_url());
@@ -103,7 +103,7 @@ class FileServiceTest {
                 "1996-01-10",
                 "",
                 "2",
-                "1996",
+                "1997",
                 "4",
                 "4",
                 "https://pubs.acs.org/loi/achre4",
@@ -136,7 +136,7 @@ class FileServiceTest {
                 "1996-01-10",
                 "",
                 "2",
-                "1996-01",
+                "1997-01",
                 "3",
                 "4",
                 "https://pubs.acs.org/loi/achre4",
@@ -168,7 +168,7 @@ class FileServiceTest {
                 "1996-01-10",
                 "",
                 "2",
-                "1996-01",
+                "1997-01",
                 "3",
                 "4",
                 "https://pubs.acs.org/loi/achre4",
@@ -200,7 +200,7 @@ class FileServiceTest {
                 "1996-01-10",
                 "",
                 "2",
-                "1996-01",
+                "1997-01",
                 "3",
                 "4",
                 "https://pubs.acs.org/loi/achre4",
@@ -233,7 +233,7 @@ class FileServiceTest {
                 "1996-01-10",
                 "",
                 "2",
-                "1996-01",
+                "1997-01",
                 "3",
                 "4",
                 "",
@@ -265,7 +265,7 @@ class FileServiceTest {
                 "1996-01-10",
                 "",
                 "2",
-                "1996-01",
+                "1997-01",
                 "3",
                 "4",
                 "",
@@ -294,7 +294,7 @@ class FileServiceTest {
         Assertions.assertEquals("1996-01-10", lineOut.getDate_first_issue_online());
         Assertions.assertEquals("",lineOut.getNum_first_vol_online());
         Assertions.assertEquals("2", lineOut.getNum_first_issue_online());
-        Assertions.assertEquals("1996-01-01", lineOut.getDate_last_issue_online());
+        Assertions.assertEquals("1997-01-01", lineOut.getDate_last_issue_online());
         Assertions.assertEquals("3", lineOut.getNum_last_vol_online());
         Assertions.assertEquals("4", lineOut.getNum_last_issue_online());
         Assertions.assertEquals("", lineOut.getTitle_url());
@@ -325,7 +325,7 @@ class FileServiceTest {
                 "1996-01-10",
                 "",
                 "2",
-                "1996-01",
+                "1997-01",
                 "3",
                 "4",
                 "https://pubs.acs.org/loi/achre4",
@@ -357,7 +357,7 @@ class FileServiceTest {
                 "1996-01-10",
                 "",
                 "2",
-                "1996-01",
+                "1997-01",
                 "3",
                 "4",
                 "https://pubs.acs.org/loi/achre4",
@@ -386,7 +386,7 @@ class FileServiceTest {
         Assertions.assertEquals("1996-01-10", lineOut.getDate_first_issue_online());
         Assertions.assertEquals("",lineOut.getNum_first_vol_online());
         Assertions.assertEquals("2", lineOut.getNum_first_issue_online());
-        Assertions.assertEquals("1996-01-01", lineOut.getDate_last_issue_online());
+        Assertions.assertEquals("1997-01-01", lineOut.getDate_last_issue_online());
         Assertions.assertEquals("3", lineOut.getNum_last_vol_online());
         Assertions.assertEquals("4", lineOut.getNum_last_issue_online());
         Assertions.assertEquals("https://pubs.acs.org/loi/achre4", lineOut.getTitle_url());
@@ -417,7 +417,7 @@ class FileServiceTest {
                 "1996-01-10",
                 "",
                 "2",
-                "1996-01",
+                "1997-01",
                 "3",
                 "4F",
                 "https://pubs.acs.org/loi/achre4",
@@ -449,7 +449,7 @@ class FileServiceTest {
                 "1996-01-10",
                 "",
                 "2",
-                "1996-01",
+                "1997-01",
                 "3",
                 "4F",
                 "https://pubs.acs.org/loi/achre4",
@@ -478,7 +478,7 @@ class FileServiceTest {
         Assertions.assertEquals("1996-01-10", lineOut.getDate_first_issue_online());
         Assertions.assertEquals("",lineOut.getNum_first_vol_online());
         Assertions.assertEquals("2", lineOut.getNum_first_issue_online());
-        Assertions.assertEquals("1996-01-01", lineOut.getDate_last_issue_online());
+        Assertions.assertEquals("1997-01-01", lineOut.getDate_last_issue_online());
         Assertions.assertEquals("3", lineOut.getNum_last_vol_online());
         Assertions.assertEquals("4F", lineOut.getNum_last_issue_online());
         Assertions.assertEquals("https://pubs.acs.org/loi/achre4", lineOut.getTitle_url());
@@ -509,7 +509,7 @@ class FileServiceTest {
                 "1996-01-10",
                 "",
                 "2",
-                "1996-01",
+                "1997-01",
                 "3",
                 "4F",
                 "https://pubs.acs.org/loi/achre4",
@@ -542,7 +542,7 @@ class FileServiceTest {
                 "1996-01-10",
                 "",
                 "2",
-                "1996-01",
+                "1997-01",
                 "3",
                 "4",
                 "https://pubs.acs.org/loi/achre4",
@@ -574,7 +574,7 @@ class FileServiceTest {
                 "1996-01-10",
                 "",
                 "2",
-                "1996-01",
+                "1997-01",
                 "3",
                 "4",
                 "https://pubs.acs.org/loi/achre4",
@@ -603,7 +603,7 @@ class FileServiceTest {
         Assertions.assertEquals("1996-01-10", lineOut.getDate_first_issue_online());
         Assertions.assertEquals("",lineOut.getNum_first_vol_online());
         Assertions.assertEquals("2", lineOut.getNum_first_issue_online());
-        Assertions.assertEquals("1996-01-01", lineOut.getDate_last_issue_online());
+        Assertions.assertEquals("1997-01-01", lineOut.getDate_last_issue_online());
         Assertions.assertEquals("3", lineOut.getNum_last_vol_online());
         Assertions.assertEquals("4", lineOut.getNum_last_issue_online());
         Assertions.assertEquals("https://pubs.acs.org/loi/achre4", lineOut.getTitle_url());
