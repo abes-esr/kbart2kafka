@@ -67,15 +67,15 @@ public class Utils {
             return "";
         Matcher matcher = Pattern.compile("(\\d{4}-\\d{2}-\\d{2})", Pattern.CASE_INSENSITIVE).matcher(dateToFormat);
         if (matcher.find()) {
-            return checkDate(dateToFormat);
+            return dateToFormat;
         }
         matcher = Pattern.compile("(\\d{4}-\\d{2})", Pattern.CASE_INSENSITIVE).matcher(dateToFormat);
         if (matcher.find()) {
-            return checkDate(dateToFormat + "-01");
+            return dateToFormat + "-01";
         }
         matcher = Pattern.compile("(\\d{4})", Pattern.CASE_INSENSITIVE).matcher(dateToFormat);
         if (matcher.find()) {
-            return checkDate(dateToFormat + "-01-01");
+            return dateToFormat + "-01-01";
         }
         throw new IllegalDateException("Format de date non reconnu, la date doit être au format YYYY ou YYYY-MM ou YYYY-MM-DD");
     }
