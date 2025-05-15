@@ -198,5 +198,7 @@ public class FileService {
                 Utils.isDateBeforeOtherDate(ligneKbartDto.getDate_last_issue_online(),ligneKbartDto.getDate_first_issue_online())){
             throw new IllegalFileFormatException("DATE_LAST_ISSUE_ONLINE ne peut pas être antérieure à DATE_FIRST_ISSUE_ONLINE");
         }
+
+        //todo add check date with Utils.checkDate
     }
 }
