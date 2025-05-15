@@ -39,11 +39,11 @@ public class KbartController {
         this.providerPackageService = providerPackageService;
     }
 
-    @PostMapping(value = "/uploadFile/{fileName}")
-    public void uploadFile(@PathVariable String fileName) {
+    @PostMapping(value ="/uploadFile/{fileName}")
+    public void uploadFile( @PathVariable String fileName) {
         long startTime = System.currentTimeMillis();
         //	Contrôle de la présence d'un paramètre au lancement de Kbart2kafkaApplication
-        if (fileName == null || fileName.isEmpty()) {
+        if (fileName == null || fileName.isEmpty() ) {
             log.error("Message envoyé : {}", "Le chemin d'accès au fichier tsv n'a pas été trouvé dans les paramètres de l'application");
         } else {
             ThreadContext.put("package", fileName);
@@ -64,17 +64,20 @@ public class KbartController {
         log.debug("Temps d'exécution : {} secondes", executionTime);
     }
 
-    @GetMapping("/file/{filename}")
-    public ResponseEntity<?> getLogsFromPackageAndDate(@PathVariable String filename) {
-        if (filename == null || filename.isEmpty()) {
-            return ResponseEntity.badRequest().body("Le paramètre filename est vide.");
-        }
+    @GetMapping(value = {"/file/{fileName}", "/file/{path}/{fileName}"})
+    public ResponseEntity<?> getFile(@PathVariable(required = false) String path, @PathVariable String fileName) {
+        boolean isReport = ((path != null) && path.equals("report"));
 
+        if (fileName == null || fileName.isEmpty()) {
+            return ResponseEntity.badRequest().body("Le paramètre fileName est vide.");
+        } else if ((path != null) && !path.equals("report")){
+            return ResponseEntity.badRequest().body("Le chemin est incorrect");
+        }
         try {
-            File fichier = new File(pathToKbart + filename);
+            File fichier = isReport ? new File(pathToKbart + path + File.separator + fileName) : new File(pathToKbart + fileName);
 
             if (!fichier.exists()) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Le fichier " + filename + " est introuvable.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Le fichier " + fileName + " est introuvable.");
             }
 
             FileInputStream fs = new FileInputStream(fichier);
