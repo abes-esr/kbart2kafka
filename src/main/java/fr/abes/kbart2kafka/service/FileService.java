@@ -151,6 +151,15 @@ public class FileService {
             kbartLineInDtoObject.setBestPpn(line[25]);
         }
 
+        if(kbartLineInDtoObject.getPublication_title().length() > 4000){
+            throw new IllegalFileFormatException("La valeur de PUBLICATION_TITLE est trop grande (grandeur acceptée : 4000, grandeur actuelle : " + kbartLineInDtoObject.getPublication_title().length() + ")");
+        }
+
+        try {
+            PUBLICATION_TYPE.valueOf(kbartLineInDtoObject.getPublication_type());
+        } catch (IllegalArgumentException ex) {
+            throw new IllegalFileFormatException("La valeur de PUBLICATION_TYPE est invalide. (valeurs acceptées : monograph, serial)");
+        }
 //        checkKbart(kbartLineInDtoObject, isForcedOrBypassed);
         return kbartLineInDtoObject;
 
@@ -180,11 +189,6 @@ public class FileService {
         }
         if(!ligneKbartDto.getCoverage_depth().equals("fulltext")){
             throw new IllegalFileFormatException("La valeur de COVERAGE_DEPTH est invalide");
-        }
-        try {
-            PUBLICATION_TYPE.valueOf(ligneKbartDto.getPublication_type());
-        } catch (IllegalArgumentException ex) {
-            throw new IllegalFileFormatException("La valeur de PUBLICATION_TYPE est invalide. (valeurs acceptées : monograph, serial)");
         }
         if(!ligneKbartDto.getAccess_type().equals("P") && !ligneKbartDto.getAccess_type().equals("F")){
             throw new IllegalFileFormatException("La valeur de ACCESS_TYPE est invalide. (valeurs acceptées : P, F)");
