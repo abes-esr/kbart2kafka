@@ -76,7 +76,7 @@ public class FileService {
                     CheckFiles.isValidUtf8(ligneKbart);
                     kbartsToSend.add(mapper.writeValueAsString(constructDto(tsvElementsOnOneLine, cpt.get(), nbLignesFichier, isForcedOrBypassed)));
                 } catch (IllegalDateException | IllegalFileFormatException | JsonProcessingException e) {
-                    log.error("Erreur dans le fichier en entrée à la ligne " + cpt.get() + " : " + e.getMessage());
+                    log.error("Erreur dans le fichier en entrée à la ligne " + (cpt.get() + 1) + " : " + e.getMessage());
                     isOnError.set(true);
                 }
             });
