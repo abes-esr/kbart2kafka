@@ -21,8 +21,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -50,7 +49,22 @@ public class FileService {
 
 //    @PostConstruct
     void initExecutor() {
-        executor = Executors.newFixedThreadPool(nbThread);
+        int corePoolSize    = nbThread;
+        int maximumPoolSize = nbThread;
+        long keepAliveTime  = 0L;
+        TimeUnit unit       = TimeUnit.MILLISECONDS;
+        // Choisissez une capacité de file adaptée à votre volume
+        BlockingQueue<Runnable> queue = new LinkedBlockingQueue<>(1000);
+
+        executor = new ThreadPoolExecutor(
+                corePoolSize,
+                maximumPoolSize,
+                keepAliveTime,
+                unit,
+                queue,
+                // ici, si la file est pleine, la tâche s'exécutera dans le thread appelant
+                new ThreadPoolExecutor.CallerRunsPolicy()
+        );
     }
 
 
