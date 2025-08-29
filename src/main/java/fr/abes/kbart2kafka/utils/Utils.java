@@ -121,4 +121,15 @@ public class Utils {
         }
     }
 
+    public static Boolean isDateAfterToday(String date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date date1 = sdf.parse(date);
+            Date today = new Date();
+            return date1.after(today);
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+
 }
