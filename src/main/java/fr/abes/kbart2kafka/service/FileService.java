@@ -181,7 +181,7 @@ public class FileService {
     }
 
     public String checkFile(File file){
-        AtomicReference<String> result = new AtomicReference<>("Nb_line ; Message d'erreur\n");
+        AtomicReference<String> result = new AtomicReference<>("Nb_line ; Message d'erreur<br/>");
         try (BufferedReader buff = new BufferedReader(new FileReader(file))) {
             List<String> fileContent = buff.lines().toList();
             AtomicInteger currentNbLine = new AtomicInteger(1);
@@ -190,7 +190,7 @@ public class FileService {
                     ArrayList<String> listeError = checkKbart(constructDtoLazyMode(ligneKbart.split("\t"), currentNbLine.get(),fileContent.size()));
                     listeError.forEach(error ->
 //                            log.error("Erreur dans la ligne {} : {}", currentNbLine.get(), error)
-                            result.set(result.get() + currentNbLine.get() + " ; " + error + "\n")
+                            result.set(result.get() + currentNbLine.get() + " ; " + error + "<br/>")
                     );
                 } catch (IllegalFileFormatException | IllegalDateException e) {
                     log.info("Erreur dans la ligne {} : {}", currentNbLine.get(), e.getMessage());
