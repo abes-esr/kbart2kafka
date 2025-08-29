@@ -97,6 +97,20 @@ public class KbartController {
         }
     }
 
+    @GetMapping(value = {"/checkfile/{fileName}", "/checkfile/{fileName}"})
+    public ResponseEntity<String> checkFile(@PathVariable String fileName) {
+        if (fileName == null || fileName.isEmpty()) {
+            return ResponseEntity.badRequest().body("Le paramètre fileName est vide.");
+        }
+
+        File fichier = new File(pathToKbart + File.separator + fileName);
+
+        if (!fichier.exists()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Le fichier " + fileName + " est introuvable.");
+        }
+        return ResponseEntity.ok(fileService.checkFile(fichier));
+    }
+
     private void checkExistingPackage(String filename) throws IllegalProviderException, IllegalPackageException, IllegalDateException {
         if (providerPackageService.hasMoreRecentPackageInBdd(Utils.extractProvider(filename), Utils.extractPackageName(filename), Utils.extractDateFilename(filename)))
             throw new IllegalPackageException("Un package plus récent est déjà présent dans la base");
