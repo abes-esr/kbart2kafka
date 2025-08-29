@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.kafka.core.KafkaTemplate;
 
+import java.io.File;
+
 @SpringBootTest(classes = {FileService.class, ObjectMapper.class})
 class FileServiceTest {
     @Value("${topic.name.target.kbart}")
@@ -623,5 +625,25 @@ class FileServiceTest {
         Assertions.assertEquals("jchsc3", lineOut.getPreceding_publication_title_id());
         Assertions.assertEquals("P", lineOut.getAccess_type());
         Assertions.assertNull(lineOut.getBestPpn());
+    }
+
+    @Test
+    void testCheckFile(){
+        File file = new File("src/test/resources/fichierTest.tsv");
+        String result = fileService.checkFile(file);
+        Assertions.assertEquals(
+                "Nb_line ; Message d'erreur\n" +
+                "1 ; La valeur de COVERAGE_DEPTH est invalide\n" +
+                "1 ; La Date DATE_MONOGRAPH_PUBLISHED_PRINT est mal formatées (ex. années invalides : « 21546445-01-01 »\n" +
+                "2 ; La valeur de COVERAGE_DEPTH est invalide\n" +
+                "2 ; La Date DATE_FIRST_ISSUE_ONLINE est mal formatées (ex. années invalides : « 5500-01-01 »\n" +
+                "2 ; La Date DATE_MONOGRAPH_PUBLISHED_PRINT est mal formatées (ex. années invalides : « 21546445-01-01 »\n" +
+                "5 ; Les champs PRINT_IDENTIFIER et ONLINE_IDENTIFIER sont identiques\n" +
+                "7 ; Les champs PRINT_IDENTIFIER et ONLINE_IDENTIFIER sont identiques\n" +
+                "7 ; La valeur de NUM_LAST_ISSUE_ONLINE n'est pas un nombre\n" +
+                "7 ; La valeur de COVERAGE_DEPTH est invalide\n" +
+                "7 ; La valeur de ACCESS_TYPE est invalide. (valeurs acceptées : P, F)\n" +
+                "7 ; La valeur de PUBLICATION_TYPE est invalide. (valeurs acceptées : monograph, serial)\n",
+                result);
     }
 }
