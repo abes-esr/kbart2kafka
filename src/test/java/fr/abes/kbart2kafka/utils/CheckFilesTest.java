@@ -110,40 +110,40 @@ class CheckFilesTest {
         this.file2 = new File("test2.tsv");
         FileUtils.writeStringToFile(file2, "testA\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY\tbest_ppn", StandardCharsets.UTF_8, true);
         IllegalFileFormatException erreur2 = Assertions.assertThrows(IllegalFileFormatException.class, () -> CheckFiles.detectHeaderPresence(header, file2, true));
-        Assertions.assertEquals("L'en tete du fichier est incorrecte. L'option _BYPASS n'est pas compatible avec la présence d'une colonne best_pnn", erreur2.getMessage());
+        Assertions.assertEquals("Format du fichier incorrect. L'option _BYPASS n'est pas compatible avec la présence d'une colonne best_pnn", erreur2.getMessage());
 
         // header à 25 colonnes avec erreur de nom de colonne
         this.file3 = new File("test3.tsv");
         FileUtils.writeStringToFile(file3, "testAvecUneErreur\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY", StandardCharsets.UTF_8, true);
         IllegalFileFormatException erreur3 = Assertions.assertThrows(IllegalFileFormatException.class, () -> CheckFiles.detectHeaderPresence(header, file3, false));
-        Assertions.assertEquals("L'en tete du fichier est incorrecte. L’en tête devrait être comme ceci : testA\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY et best_ppn", erreur3.getMessage());
+        Assertions.assertEquals("Format du fichier incorrect. L’en tête devrait être comme ceci : testA\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY et best_ppn", erreur3.getMessage());
 
         // header à 26 colonnes avec erreur de nom de colonne
         File file4 = new File("test4.tsv");
         FileUtils.writeStringToFile(file4, "testA\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY\ttestZ", StandardCharsets.UTF_8, true);
         IllegalFileFormatException erreur4 = Assertions.assertThrows(IllegalFileFormatException.class, () -> CheckFiles.detectHeaderPresence(header, file4, false));
-        Assertions.assertEquals("L'en tete du fichier est incorrecte. L’en tête devrait être comme ceci : testA\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY et best_ppn", erreur4.getMessage());
+        Assertions.assertEquals("Format du fichier incorrect. L’en tête devrait être comme ceci : testA\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY et best_ppn", erreur4.getMessage());
         file4.deleteOnExit();
 
         // Test avec header à 24 colonnes
         File file5 = new File("test5.tsv");
         FileUtils.writeStringToFile(file5, "testA\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX", StandardCharsets.UTF_8, true);
         IllegalFileFormatException erreur5 = Assertions.assertThrows(IllegalFileFormatException.class, () -> CheckFiles.detectHeaderPresence(header, file5, false));
-        Assertions.assertEquals("L'en tete du fichier est incorrecte. L’en tête devrait être comme ceci : testA\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY et best_ppn", erreur5.getMessage());
+        Assertions.assertEquals("Format du fichier incorrect. L’en tête devrait être comme ceci : testA\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY et best_ppn", erreur5.getMessage());
         file5.deleteOnExit();
 
         // Test avec header à 27 colonnes
         File file6 = new File("test6.tsv");
         FileUtils.writeStringToFile(file6, "testA\testB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY\ttestZ\ttest27colonne", StandardCharsets.UTF_8, true);
         IllegalFileFormatException erreur6 = Assertions.assertThrows(IllegalFileFormatException.class, () -> CheckFiles.detectHeaderPresence(header, file6, false));
-        Assertions.assertEquals("L'en tete du fichier est incorrecte. L’en tête devrait être comme ceci : testA\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY et best_ppn", erreur6.getMessage());
+        Assertions.assertEquals("Format du fichier incorrect. L’en tête devrait être comme ceci : testA\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY et best_ppn", erreur6.getMessage());
         file6.deleteOnExit();
 
         // Test d'une erreur avec header à 26 colonnes dont une colonne best_ppn
         File file7 = new File("test7.tsv");
         FileUtils.writeStringToFile(file7, "testAvecErreur\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY\tbest_ppn", StandardCharsets.UTF_8, true);
         IllegalFileFormatException erreur7 = Assertions.assertThrows(IllegalFileFormatException.class, () -> CheckFiles.detectHeaderPresence(header, file7, false));
-        Assertions.assertEquals("L'en tete du fichier est incorrecte. L’en tête devrait être comme ceci : testA\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY et best_ppn", erreur7.getMessage());
+        Assertions.assertEquals("Format du fichier incorrect. L’en tête devrait être comme ceci : testA\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY et best_ppn", erreur7.getMessage());
         file7.deleteOnExit();
     }
     @Test
@@ -154,7 +154,7 @@ class CheckFilesTest {
         File file7 = new File("test7.tsv");
         FileUtils.writeStringToFile(file7, "testA\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\tbest_ppn", StandardCharsets.UTF_8, true);
         IllegalFileFormatException erreur7 = Assertions.assertThrows(IllegalFileFormatException.class, () -> CheckFiles.detectHeaderPresence(header, file7, false));
-        Assertions.assertEquals(erreur7.getMessage(),"L'en tete du fichier est incorrecte. L’en tête devrait être comme ceci : testA\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY et best_ppn");
+        Assertions.assertEquals(erreur7.getMessage(),"Format du fichier incorrect. L’en tête devrait être comme ceci : testA\ttestB\ttestC\ttestD\ttestE\ttestF\ttestG\ttestH\ttestI\ttestJ\ttestK\ttestL\ttestM\ttestN\ttestO\ttestP\ttestQ\ttestR\ttestS\ttestT\ttestU\ttestV\ttestW\ttestX\ttestY et best_ppn");
         file7.deleteOnExit();
     }
 
@@ -176,7 +176,7 @@ class CheckFilesTest {
         this.file = new File("test3_BYPASS.tsv");
         FileUtils.writeStringToFile(file, "test\ttest\ttest\tbest_ppn", StandardCharsets.UTF_8, true);
         IllegalFileFormatException erreur1 = Assertions.assertThrows(IllegalFileFormatException.class, () -> CheckFiles.detectHeaderPresence("test\ttest\ttest\tbest_ppn", file, true));
-        Assertions.assertEquals("L'en tete du fichier est incorrecte. L'option _BYPASS n'est pas compatible avec la présence d'une colonne best_pnn", erreur1.getMessage());
+        Assertions.assertEquals("Format du fichier incorrect. L'option _BYPASS n'est pas compatible avec la présence d'une colonne best_pnn", erreur1.getMessage());
 
         this.file2 = new File("test3_BYPASS_FORCE.tsv");
         FileUtils.writeStringToFile(file2, "test\ttest\ttest", StandardCharsets.UTF_8, true);
