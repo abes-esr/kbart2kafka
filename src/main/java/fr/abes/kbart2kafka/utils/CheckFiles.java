@@ -4,7 +4,10 @@ import fr.abes.kbart2kafka.exception.IllegalFileFormatException;
 import fr.abes.kbart2kafka.exception.IllegalProviderException;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.charset.CharacterCodingException;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
@@ -87,9 +90,9 @@ public class CheckFiles {
             String[] headerKbart = line.split("\t");
 
             if(isBypassOptionPresent && line.contains("best_ppn")) {
-                throw new IllegalFileFormatException("L'en tete du fichier est incorrecte. L'option _BYPASS n'est pas compatible avec la présence d'une colonne best_pnn");
+                throw new IllegalFileFormatException("Format du fichier incorrect. L'option _BYPASS n'est pas compatible avec la présence d'une colonne best_pnn");
             }else if ((!(headerKbart.length == 25 && line.contains(header)) && !(headerKbart.length == 26 && line.contains(header) && line.contains("best_ppn")))) {
-                throw new IllegalFileFormatException( "L'en tete du fichier est incorrecte. L’en tête devrait être comme ceci : " + header + " et best_ppn" );
+                throw new IllegalFileFormatException( "Format du fichier incorrect. L’en tête devrait être comme ceci : " + header + " et best_ppn" );
             }
         }
     }

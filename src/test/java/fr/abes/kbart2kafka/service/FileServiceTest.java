@@ -632,18 +632,18 @@ class FileServiceTest {
         File file = new File("src/test/resources/fichierTest.tsv");
         String result = fileService.checkFile(file);
         Assertions.assertEquals(
-                "Nb_line ; Message d'erreur\n" +
-                "1 ; La valeur de COVERAGE_DEPTH est invalide\n" +
-                "1 ; La Date DATE_MONOGRAPH_PUBLISHED_PRINT est mal formatées (ex. années invalides : « 21546445-01-01 »\n" +
-                "2 ; La valeur de COVERAGE_DEPTH est invalide\n" +
-                "2 ; La Date DATE_FIRST_ISSUE_ONLINE est mal formatées (ex. années invalides : « 5500-01-01 »\n" +
-                "2 ; La Date DATE_MONOGRAPH_PUBLISHED_PRINT est mal formatées (ex. années invalides : « 21546445-01-01 »\n" +
-                "5 ; Les champs PRINT_IDENTIFIER et ONLINE_IDENTIFIER sont identiques\n" +
-                "7 ; Les champs PRINT_IDENTIFIER et ONLINE_IDENTIFIER sont identiques\n" +
-                "7 ; La valeur de NUM_LAST_ISSUE_ONLINE n'est pas un nombre\n" +
-                "7 ; La valeur de COVERAGE_DEPTH est invalide\n" +
-                "7 ; La valeur de ACCESS_TYPE est invalide. (valeurs acceptées : P, F)\n" +
-                "7 ; La valeur de PUBLICATION_TYPE est invalide. (valeurs acceptées : monograph, serial)\n",
+                "Nb_line ; Message d'erreur<br/>" +
+                "1 ; La valeur de COVERAGE_DEPTH est invalide<br/>" +
+                "1 ; La Date DATE_MONOGRAPH_PUBLISHED_PRINT est mal formatées (ex. années invalides : « 21546445-01-01 »<br/>" +
+                "2 ; La valeur de COVERAGE_DEPTH est invalide<br/>" +
+                "2 ; La Date DATE_FIRST_ISSUE_ONLINE est mal formatées (ex. années invalides : « 5500-01-01 »<br/>" +
+                "2 ; La Date DATE_MONOGRAPH_PUBLISHED_PRINT est mal formatées (ex. années invalides : « 21546445-01-01 »<br/>" +
+                "5 ; Les champs PRINT_IDENTIFIER et ONLINE_IDENTIFIER sont identiques<br/>" +
+                "7 ; Les champs PRINT_IDENTIFIER et ONLINE_IDENTIFIER sont identiques<br/>" +
+                "7 ; La valeur de NUM_LAST_ISSUE_ONLINE n'est pas un nombre<br/>" +
+                "7 ; La valeur de COVERAGE_DEPTH est invalide<br/>" +
+                "7 ; La valeur de ACCESS_TYPE est invalide. (valeurs acceptées : P, F)<br/>" +
+                "7 ; La valeur de PUBLICATION_TYPE est invalide. (valeurs acceptées : monograph, serial)<br/>",
                 result);
     }
 }
