@@ -1,5 +1,5 @@
 # Image pour la compilation
-FROM maven:3-eclipse-temurin-17 as build-image
+FROM maven:3-eclipse-temurin-21 as build-image
 WORKDIR /build/
 # On lance la compilation Java
 # On débute par une mise en cache docker des dépendances Java
@@ -15,13 +15,13 @@ RUN mvn --batch-mode \
         -Duser.language=fr \
         package spring-boot:repackage
 
-FROM maven:3-eclipse-temurin-17 as kbart2kafka-builder
+FROM maven:3-eclipse-temurin-21 as kbart2kafka-builder
 WORKDIR application
 ARG JAR_FILE=build/target/kbart2kafka.jar
 COPY --from=build-image ${JAR_FILE} kbart2kafka.jar
 RUN java -Djarmode=layertools -jar kbart2kafka.jar extract
 
-FROM eclipse-temurin:17-jdk as kbart2kafka-image
+FROM eclipse-temurin:21-jdk as kbart2kafka-image
 RUN apt-get update
 RUN apt-get install -y locales locales-all
 ENV LC_ALL fr_FR.UTF-8
