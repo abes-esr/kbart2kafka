@@ -1,5 +1,5 @@
 # Image pour la compilation
-FROM maven:3-eclipse-temurin-21 as build-image
+FROM maven:3.9-eclipse-temurin-21 as build-image
 WORKDIR /build/
 # On lance la compilation Java
 # On débute par une mise en cache docker des dépendances Java

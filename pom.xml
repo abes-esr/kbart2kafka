@@ -207,11 +207,9 @@
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>${spring-boot.version}</version>
                     <configuration>
                         <layers>
                             <enabled>true</enabled>
-                            <includeLayerTools>true</includeLayerTools>
                         </layers>
                         <mainClass>fr.abes.kbart2kafka.Kbart2kafkaApplication</mainClass>
                     </configuration>
