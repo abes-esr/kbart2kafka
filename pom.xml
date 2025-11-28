@@ -17,8 +17,8 @@
         <finalName>kbart2kafka-${project.artifactId}-${project.version}</finalName>
         <jarName>kbart2kafka</jarName>
         <java.version>21</java.version>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <webBaseDir>./target/</webBaseDir>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
@@ -205,11 +205,9 @@
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
-                    <version>2.3.5.RELEASE</version>
                     <configuration>
                         <layers>
                             <enabled>true</enabled>
-                            <includeLayerTools>true</includeLayerTools>
                         </layers>
                         <mainClass>fr.abes.kbart2kafka.Kbart2kafkaApplication</mainClass>
                     </configuration>

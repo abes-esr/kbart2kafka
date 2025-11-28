@@ -1,5 +1,5 @@
 # Image pour la compilation
-FROM maven:3-eclipse-temurin-21 as build-image
+FROM maven:3.9-eclipse-temurin-21 as build-image
 WORKDIR /build/
 # On lance la compilation Java
 # On débute par une mise en cache docker des dépendances Java
@@ -17,8 +17,7 @@ RUN mvn --batch-mode \
 
 FROM maven:3-eclipse-temurin-21 as kbart2kafka-builder
 WORKDIR application
-ARG JAR_FILE=build/target/kbart2kafka.jar
-COPY --from=build-image ${JAR_FILE} kbart2kafka.jar
+COPY --from=build-image /build/target/kbart2kafka.jar kbart2kafka.jar
 RUN java -Djarmode=layertools -jar kbart2kafka.jar extract
 
 FROM eclipse-temurin:21-jdk as kbart2kafka-image
@@ -34,7 +33,6 @@ WORKDIR /app/
 COPY --from=kbart2kafka-builder application/dependencies/ ./
 COPY --from=kbart2kafka-builder application/spring-boot-loader/ ./
 COPY --from=kbart2kafka-builder application/snapshot-dependencies/ ./
-COPY --from=kbart2kafka-builder application/application/ ./
 COPY --from=kbart2kafka-builder application/*.jar ./kbart2kafka.jar
 
 #ENTRYPOINT ["java","-XX:MaxRAMPercentage=75","-XX:+UseG1GC","-XX:ConcGCThreads=5","-XX:+ExitOnOutOfMemoryError","-XX:MaxGCPauseMillis=100","-jar","/app/kbart2kafka.jar"]
