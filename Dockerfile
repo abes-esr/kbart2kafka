@@ -17,8 +17,7 @@ RUN mvn --batch-mode \
 
 FROM maven:3-eclipse-temurin-21 as kbart2kafka-builder
 WORKDIR application
-ARG JAR_FILE=build/target/kbart2kafka.jar
-COPY --from=build-image ${JAR_FILE} kbart2kafka.jar
+COPY --from=build-image /build/target/kbart2kafka.jar kbart2kafka.jar
 RUN java -Djarmode=layertools -jar kbart2kafka.jar extract
 
 FROM eclipse-temurin:21-jdk as kbart2kafka-image
