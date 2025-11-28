@@ -33,7 +33,6 @@ WORKDIR /app/
 COPY --from=kbart2kafka-builder application/dependencies/ ./
 COPY --from=kbart2kafka-builder application/spring-boot-loader/ ./
 COPY --from=kbart2kafka-builder application/snapshot-dependencies/ ./
-COPY --from=kbart2kafka-builder application/application/ ./
 COPY --from=kbart2kafka-builder application/*.jar ./kbart2kafka.jar
 
 #ENTRYPOINT ["java","-XX:MaxRAMPercentage=75","-XX:+UseG1GC","-XX:ConcGCThreads=5","-XX:+ExitOnOutOfMemoryError","-XX:MaxGCPauseMillis=100","-jar","/app/kbart2kafka.jar"]
