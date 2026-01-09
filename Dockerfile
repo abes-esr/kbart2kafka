@@ -10,24 +10,20 @@ RUN mvn -f /build/kbart2kafka/pom.xml verify --fail-never
 COPY ./   /build/
 
 RUN mvn --batch-mode \
-        -Dmaven.test.skip=false \
+        -Dmaven.test.skip=true \
         -Duser.timezone=Europe/Paris \
         -Duser.language=fr \
-        package spring-boot:repackage
-
-FROM maven:3-eclipse-temurin-21 AS kbart2kafka-builder
-WORKDIR /application
-COPY --from=build-image /build/target/kbart2kafka.jar kbart2kafka.jar
-RUN java -Djarmode=layertools -jar kbart2kafka.jar extract
+        package -Passembly
 
 FROM ossyupiik/java:21.0.8 AS kbart2kafka-image
-WORKDIR /app/
-COPY --from=kbart2kafka-builder /application/dependencies/ ./
-COPY --from=kbart2kafka-builder /application/spring-boot-loader/ ./
-COPY --from=kbart2kafka-builder /application/snapshot-dependencies/ ./
-COPY --from=kbart2kafka-builder /application/*.jar ./kbart2kafka.jar
+WORKDIR /
+COPY --from=build-image /build/target/kbart2kafka-distribution.tar.gz /
+RUN tar xvfz kbart2kafka-distribution.tar.gz
+RUN rm -f /kbart2kafka-distribution.tar.gz
 
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-CMD ["java", "-jar", "/app/kbart2kafka.jar"]
+#CMD ["java", "-cp", "/kbart2kafka/lib/*", "fr.abes.kbart2kafka.Kbart2kafkaApplication"]
+CMD ["tail", "-f","/dev/null"]
+
