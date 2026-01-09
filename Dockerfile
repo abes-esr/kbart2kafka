@@ -24,6 +24,6 @@ RUN rm -f /kbart2kafka-distribution.tar.gz
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-#CMD ["java", "-cp", "/kbart2kafka/lib/*", "fr.abes.kbart2kafka.Kbart2kafkaApplication"]
-CMD ["tail", "-f","/dev/null"]
+CMD ["java", "-cp", "/kbart2kafka/lib/*", "fr.abes.kbart2kafka.Kbart2kafkaApplication"]
+#CMD ["tail", "-f","/dev/null"]
 
