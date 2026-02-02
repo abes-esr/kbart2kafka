@@ -1,5 +1,5 @@
 # Image pour la compilation
-FROM maven:3.9-eclipse-temurin-21 as build-image
+FROM maven:3.9-eclipse-temurin-21 AS build-image
 WORKDIR /build/
 # On lance la compilation Java
 # On débute par une mise en cache docker des dépendances Java
@@ -10,30 +10,20 @@ RUN mvn -f /build/kbart2kafka/pom.xml verify --fail-never
 COPY ./   /build/
 
 RUN mvn --batch-mode \
-        -Dmaven.test.skip=false \
+        -Dmaven.test.skip=true \
         -Duser.timezone=Europe/Paris \
         -Duser.language=fr \
-        package spring-boot:repackage
+        package -Passembly
 
-FROM maven:3-eclipse-temurin-21 as kbart2kafka-builder
-WORKDIR application
-COPY --from=build-image /build/target/kbart2kafka.jar kbart2kafka.jar
-RUN java -Djarmode=layertools -jar kbart2kafka.jar extract
+FROM ossyupiik/java:21.0.8 AS kbart2kafka-image
+WORKDIR /
+COPY --from=build-image /build/target/kbart2kafka-distribution.tar.gz /
+RUN tar xvfz kbart2kafka-distribution.tar.gz
+RUN rm -f /kbart2kafka-distribution.tar.gz
 
-FROM eclipse-temurin:21-jdk as kbart2kafka-image
-RUN apt-get update
-RUN apt-get install -y locales locales-all
-ENV LC_ALL fr_FR.UTF-8
-ENV LANG fr_FR.UTF-8
-ENV LANGUAGE fr_FR.UTF-8
 ENV TZ=Europe/Paris
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-WORKDIR /app/
 
-COPY --from=kbart2kafka-builder application/dependencies/ ./
-COPY --from=kbart2kafka-builder application/spring-boot-loader/ ./
-COPY --from=kbart2kafka-builder application/snapshot-dependencies/ ./
-COPY --from=kbart2kafka-builder application/*.jar ./kbart2kafka.jar
+CMD ["java", "-cp", "/kbart2kafka/lib/*", "fr.abes.kbart2kafka.Kbart2kafkaApplication"]
+#CMD ["tail", "-f","/dev/null"]
 
-#ENTRYPOINT ["java","-XX:MaxRAMPercentage=75","-XX:+UseG1GC","-XX:ConcGCThreads=5","-XX:+ExitOnOutOfMemoryError","-XX:MaxGCPauseMillis=100","-jar","/app/kbart2kafka.jar"]
-ENTRYPOINT ["java","-XX:MaxRAMPercentage=75","-jar","/app/kbart2kafka.jar"]
