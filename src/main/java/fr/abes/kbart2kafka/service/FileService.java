@@ -3,6 +3,7 @@ package fr.abes.kbart2kafka.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.abes.kbart2kafka.dto.LigneKbartDto;
+import fr.abes.kbart2kafka.entity.LigneKbart;
 import fr.abes.kbart2kafka.exception.IllegalDateException;
 import fr.abes.kbart2kafka.exception.IllegalFileFormatException;
 import fr.abes.kbart2kafka.utils.CheckFiles;
@@ -69,11 +70,11 @@ public class FileService {
     }
 
 
-    public void loadFile(File fichier) throws IllegalFileFormatException, IOException {
-        executeMultiThread(fichier);
+    public void loadFile(File fichier, List<LigneKbart> lastLignesKbart) throws IllegalFileFormatException, IOException {
+        executeMultiThread(fichier, lastLignesKbart);
     }
 
-    private void executeMultiThread(File fichier) throws IllegalFileFormatException {
+    private void executeMultiThread(File fichier, List<LigneKbart> lastLignesKbart) throws IllegalFileFormatException {
         initExecutor();
         try (BufferedReader buff = new BufferedReader(new FileReader(fichier))) {
             List<String> fileContent = buff.lines().toList();
@@ -88,6 +89,7 @@ public class FileService {
                 ThreadContext.put("package", fichier.getName() + ";" + cpt.get());
                 String[] tsvElementsOnOneLine = ligneKbart.split("\t");
                 try {
+                    //TODO: verifier si un bestppn existe dans {lastLignesKbart} et dans {ligneKbart}
                     CheckFiles.isValidUtf8(ligneKbart);
                     kbartsToSend.add(mapper.writeValueAsString(constructDto(tsvElementsOnOneLine, cpt.get(), nbLignesFichier, isForcedOrBypassed)));
                 } catch (IllegalDateException | IllegalFileFormatException | JsonProcessingException e) {
