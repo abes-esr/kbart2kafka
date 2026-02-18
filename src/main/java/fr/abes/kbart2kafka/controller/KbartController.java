@@ -23,7 +23,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -59,8 +61,12 @@ public class KbartController {
                 checkExistingPackage(tsvFile.getName());
 
                 List<LigneKbart> lastLignesKbart = getLigneKbartFromLastExistingPackage(tsvFile);
+                Map<String, String> lastLignesKbartHash = HashMap.newHashMap(lastLignesKbart.size());
+                lastLignesKbart.forEach(ligneKbart -> {
+                    lastLignesKbartHash.put(ligneKbart.toHash(), ligneKbart.getBestPpn());
+                });
 
-                fileService.loadFile(tsvFile, lastLignesKbart);
+                fileService.loadFile(tsvFile, lastLignesKbartHash);
             } catch (Exception | IllegalPackageException e) {
                 log.error(e.getMessage());
                 log.info("Traitement refusé du fichier {}", tsvFile.getName());

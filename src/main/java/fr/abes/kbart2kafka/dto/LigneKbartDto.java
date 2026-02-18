@@ -2,6 +2,7 @@ package fr.abes.kbart2kafka.dto;
 
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvBindByPosition;
+import fr.abes.kbart2kafka.utils.Utils;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -101,5 +102,20 @@ public class LigneKbartDto {
         return "publication title : " + this.publication_title + " / publication_type : " + this.publication_type +
                 (this.online_identifier.isEmpty() ? "" : " / online_identifier : " + this.online_identifier) +
                 (this.print_identifier.isEmpty() ? "" : " / print_identifier : " + this.print_identifier);
+    }
+
+    public String toHash() {
+        return Utils.computeHash(
+                publication_title,
+                print_identifier,
+                online_identifier,
+                title_url,
+                first_author,
+                title_id, publisher_name,
+                publication_type,
+                date_monograph_published_print,
+                date_monograph_published_online,
+                first_editor
+        );
     }
 }

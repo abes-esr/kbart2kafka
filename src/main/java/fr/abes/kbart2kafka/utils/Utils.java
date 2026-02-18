@@ -3,6 +3,7 @@ package fr.abes.kbart2kafka.utils;
 import fr.abes.kbart2kafka.exception.IllegalDateException;
 import fr.abes.kbart2kafka.exception.IllegalPackageException;
 import fr.abes.kbart2kafka.exception.IllegalProviderException;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -132,4 +133,31 @@ public class Utils {
         }
     }
 
+    public static String computeHash(
+            String publicationTitle,
+            String printIdentifier,
+            String onlineIdentifer,
+            String titleUrl,
+            String firstAuthor,
+            String titleId,
+            String publisherName,
+            String publicationType,
+            String dateMonographPublishedPrint,
+            String dateMonographPublishedOnline,
+            String firstEditor
+    ) {
+        String hash = publicationTitle
+                + printIdentifier
+                + onlineIdentifer
+                + titleUrl
+                + firstAuthor
+                + titleId
+                + publisherName
+                + publicationType
+                + dateMonographPublishedPrint
+                + dateMonographPublishedOnline
+                + firstEditor
+                ;
+        return DigestUtils.sha256Hex(hash);
+    }
 }

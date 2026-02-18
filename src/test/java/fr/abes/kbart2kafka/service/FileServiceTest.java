@@ -64,7 +64,7 @@ class FileServiceTest {
                 "P"
         };
 
-        LigneKbartDto lineOut = fileService.constructDto(lineInput,1,1,false);
+        LigneKbartDto lineOut = fileService.constructDto(lineInput,1,1);
 
         Assertions.assertEquals(1, lineOut.getNbLinesTotal());
         Assertions.assertEquals(0, lineOut.getNbCurrentLines());
@@ -126,7 +126,7 @@ class FileServiceTest {
                 "P"
         };
 
-        Assertions.assertThrows(IllegalDateException.class, () -> fileService.constructDto(lineInput,1,1, false));
+        Assertions.assertThrows(IllegalDateException.class, () -> fileService.constructDto(lineInput,1,1));
     }
 
     @Test
@@ -158,7 +158,7 @@ class FileServiceTest {
                 "jchsc3",
         };
 
-        Assertions.assertThrows(IllegalFileFormatException.class, () -> fileService.constructDto(lineInput,1,1,false));
+        Assertions.assertThrows(IllegalFileFormatException.class, () -> fileService.constructDto(lineInput,1,1));
     }
 
 //    @Test
@@ -287,7 +287,7 @@ class FileServiceTest {
                 "jchsc3",
                 "P"
         };
-        LigneKbartDto lineOut = fileService.constructDto(lineInput,1,1,true);
+        LigneKbartDto lineOut = fileService.constructDto(lineInput,1,1);
         Assertions.assertEquals(1, lineOut.getNbLinesTotal());
         Assertions.assertEquals(0, lineOut.getNbCurrentLines());
         Assertions.assertEquals("Le titre de publication", lineOut.getPublication_title());
@@ -379,7 +379,7 @@ class FileServiceTest {
                 "jchsc3",
                 "P"
         };
-        LigneKbartDto lineOut = fileService.constructDto(lineInput,1,1,true);
+        LigneKbartDto lineOut = fileService.constructDto(lineInput,1,1);
         Assertions.assertEquals(1, lineOut.getNbLinesTotal());
         Assertions.assertEquals(0, lineOut.getNbCurrentLines());
         Assertions.assertEquals("Le titre de publication", lineOut.getPublication_title());
@@ -471,7 +471,7 @@ class FileServiceTest {
                 "jchsc3",
                 "P"
         };
-        LigneKbartDto lineOut = fileService.constructDto(lineInput,1,1,true);
+        LigneKbartDto lineOut = fileService.constructDto(lineInput,1,1);
         Assertions.assertEquals(1, lineOut.getNbLinesTotal());
         Assertions.assertEquals(0, lineOut.getNbCurrentLines());
         Assertions.assertEquals("Le titre de publication", lineOut.getPublication_title());
@@ -596,7 +596,7 @@ class FileServiceTest {
                 "jchsc3",
                 "P"
         };
-        LigneKbartDto lineOut = fileService.constructDto(lineInput,1,1,true);
+        LigneKbartDto lineOut = fileService.constructDto(lineInput,1,1);
         Assertions.assertEquals(1, lineOut.getNbLinesTotal());
         Assertions.assertEquals(0, lineOut.getNbCurrentLines());
         Assertions.assertEquals("Le titre de publication", lineOut.getPublication_title());

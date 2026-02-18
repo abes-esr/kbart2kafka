@@ -1,10 +1,12 @@
 package fr.abes.kbart2kafka.entity;
 
+import fr.abes.kbart2kafka.utils.Utils;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
@@ -70,4 +72,22 @@ public class LigneKbart implements Serializable {
     private ProviderPackage providerPackage;
     @Column(name = "BEST_PPN")
     private String bestPpn;
+
+    public String toHash() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        return Utils.computeHash(
+                publicationTitle,
+                printIdentifier,
+                onlineIdentifer,
+                titleUrl,
+                firstAuthor,
+                titleId,
+                publisherName,
+                publicationType,
+                sdf.format(dateMonographPublishedPrint),
+                sdf.format(dateMonographPublishedOnline),
+                firstEditor
+        );
+    }
 }
