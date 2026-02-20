@@ -170,6 +170,10 @@ public class FileService {
             throw new IllegalFileFormatException("La valeur de PUBLICATION_TITLE est trop grande (grandeur acceptée : 4000, grandeur actuelle : " + kbartLineInDtoObject.getPublication_title().length() + ")");
         }
 
+        if(kbartLineInDtoObject.getNotes().length() > 1000){
+            throw new IllegalFileFormatException("La valeur de NOTES est trop grande (grandeur acceptée : 1000, grandeur actuelle : " + kbartLineInDtoObject.getNotes().length() + ")");
+        }
+
         try {
             PUBLICATION_TYPE.valueOf(kbartLineInDtoObject.getPublication_type());
         } catch (IllegalArgumentException ex) {
@@ -302,6 +306,10 @@ public class FileService {
 
         if(ligneKbartDto.getPublication_title().length() > 4000){
             errors.add("La valeur de PUBLICATION_TITLE est trop grande (grandeur acceptée : 4000, grandeur actuelle : " + ligneKbartDto.getPublication_title().length() + ")");
+        }
+
+        if(ligneKbartDto.getNotes().length() > 1000){
+            errors.add("La valeur de NOTES est trop grande (grandeur acceptée : 1000, grandeur actuelle : " + ligneKbartDto.getNotes().length() + ")");
         }
 
         try {
