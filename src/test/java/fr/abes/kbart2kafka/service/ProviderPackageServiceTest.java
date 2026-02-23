@@ -2,6 +2,7 @@ package fr.abes.kbart2kafka.service;
 
 import fr.abes.kbart2kafka.entity.Provider;
 import fr.abes.kbart2kafka.entity.ProviderPackage;
+import fr.abes.kbart2kafka.repository.LigneKbartRepository;
 import fr.abes.kbart2kafka.repository.ProviderPackageRepository;
 import fr.abes.kbart2kafka.repository.ProviderRepository;
 import org.assertj.core.util.Lists;
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -23,11 +24,14 @@ class ProviderPackageServiceTest {
     @Autowired
     ProviderPackageService service;
 
-    @MockBean
+    @MockitoBean
     ProviderPackageRepository providerPackageRepository;
 
-    @MockBean
+    @MockitoBean
     ProviderRepository providerRepository;
+
+    @MockitoBean
+    LigneKbartRepository ligneKbartRepository;
 
     @Test
     @DisplayName("test isMoreRecentPackage : cas général")
