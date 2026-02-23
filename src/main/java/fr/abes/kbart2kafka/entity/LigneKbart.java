@@ -73,21 +73,4 @@ public class LigneKbart implements Serializable {
     @Column(name = "BEST_PPN")
     private String bestPpn;
 
-    public String toHash() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-        return Utils.computeHash(
-                publicationTitle,
-                printIdentifier,
-                onlineIdentifer,
-                titleUrl,
-                firstAuthor,
-                titleId,
-                publisherName,
-                publicationType,
-                sdf.format(dateMonographPublishedPrint),
-                sdf.format(dateMonographPublishedOnline),
-                firstEditor
-        );
-    }
 }

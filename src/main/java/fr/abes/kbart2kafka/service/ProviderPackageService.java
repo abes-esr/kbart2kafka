@@ -1,5 +1,6 @@
 package fr.abes.kbart2kafka.service;
 
+import fr.abes.kbart2kafka.dto.LigneKbartDto;
 import fr.abes.kbart2kafka.entity.LigneKbart;
 import fr.abes.kbart2kafka.entity.Provider;
 import fr.abes.kbart2kafka.entity.ProviderPackage;
@@ -48,7 +49,7 @@ public class ProviderPackageService {
         return null;
     }
 
-    public List<LigneKbart> getLigneKbartByProviderPackage(ProviderPackage providerPackage){
-        return ligneKbartRepository.findAllByProviderPackage(providerPackage);
+    public List<LigneKbartDto> getLigneKbartByProviderPackage(ProviderPackage providerPackage){
+        return ligneKbartRepository.findAllByProviderPackage(providerPackage.getIdProviderPackage());
     }
 }

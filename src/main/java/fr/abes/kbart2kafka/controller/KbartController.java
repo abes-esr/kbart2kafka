@@ -1,5 +1,6 @@
 package fr.abes.kbart2kafka.controller;
 
+import fr.abes.kbart2kafka.dto.LigneKbartDto;
 import fr.abes.kbart2kafka.entity.LigneKbart;
 import fr.abes.kbart2kafka.entity.ProviderPackage;
 import fr.abes.kbart2kafka.exception.IllegalDateException;
@@ -60,12 +61,11 @@ public class KbartController {
                 CheckFiles.verifyFile(tsvFile, kbartHeader);
                 checkExistingPackage(tsvFile.getName());
 
-                List<LigneKbart> lastLignesKbart = getLigneKbartFromLastExistingPackage(tsvFile);
+                List<LigneKbartDto> lastLignesKbart = getLigneKbartFromLastExistingPackage(tsvFile);
                 Map<String, String> lastLignesKbartHash = HashMap.newHashMap(lastLignesKbart.size());
                 lastLignesKbart.forEach(ligneKbart -> {
                     lastLignesKbartHash.put(ligneKbart.toHash(), ligneKbart.getBestPpn());
                 });
-
                 fileService.loadFile(tsvFile, lastLignesKbartHash);
             } catch (Exception | IllegalPackageException e) {
                 log.error(e.getMessage());
@@ -129,7 +129,7 @@ public class KbartController {
             throw new IllegalPackageException("Un package plus récent est déjà présent dans la base");
     }
 
-    private List<LigneKbart> getLigneKbartFromLastExistingPackage(File tsvFile) throws IllegalProviderException, IllegalPackageException {
+    private List<LigneKbartDto> getLigneKbartFromLastExistingPackage(File tsvFile) throws IllegalProviderException, IllegalPackageException {
         ProviderPackage providerPackage = providerPackageService.getLastProviderPackage(Utils.extractProvider(tsvFile.getName()), Utils.extractPackageName(tsvFile.getName()));
         if (providerPackage != null) {
             return providerPackageService.getLigneKbartByProviderPackage(providerPackage);
