@@ -1,5 +1,8 @@
 package fr.abes.kbart2kafka.controller;
 
+import fr.abes.kbart2kafka.dto.LigneKbartDto;
+import fr.abes.kbart2kafka.entity.LigneKbart;
+import fr.abes.kbart2kafka.entity.ProviderPackage;
 import fr.abes.kbart2kafka.exception.IllegalDateException;
 import fr.abes.kbart2kafka.exception.IllegalPackageException;
 import fr.abes.kbart2kafka.exception.IllegalProviderException;
@@ -20,6 +23,10 @@ import org.springframework.web.bind.annotation.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -53,7 +60,13 @@ public class KbartController {
             try {
                 CheckFiles.verifyFile(tsvFile, kbartHeader);
                 checkExistingPackage(tsvFile.getName());
-                fileService.loadFile(tsvFile);
+
+                List<LigneKbartDto> lastLignesKbart = getLigneKbartFromLastExistingPackage(tsvFile);
+                Map<String, String> lastLignesKbartHash = HashMap.newHashMap(lastLignesKbart.size());
+                lastLignesKbart.forEach(ligneKbart -> {
+                    lastLignesKbartHash.put(ligneKbart.toHash(), ligneKbart.getBestPpn());
+                });
+                fileService.loadFile(tsvFile, lastLignesKbartHash);
             } catch (Exception | IllegalPackageException e) {
                 log.error(e.getMessage());
                 log.info("Traitement refusé du fichier {}", tsvFile.getName());
@@ -115,4 +128,13 @@ public class KbartController {
         if (providerPackageService.hasMoreRecentPackageInBdd(Utils.extractProvider(filename), Utils.extractPackageName(filename), Utils.extractDateFilename(filename)))
             throw new IllegalPackageException("Un package plus récent est déjà présent dans la base");
     }
+
+    private List<LigneKbartDto> getLigneKbartFromLastExistingPackage(File tsvFile) throws IllegalProviderException, IllegalPackageException {
+        ProviderPackage providerPackage = providerPackageService.getLastProviderPackage(Utils.extractProvider(tsvFile.getName()), Utils.extractPackageName(tsvFile.getName()));
+        if (providerPackage != null) {
+            return providerPackageService.getLigneKbartByProviderPackage(providerPackage);
+        }
+        return new ArrayList<>();
+    }
+
 }
