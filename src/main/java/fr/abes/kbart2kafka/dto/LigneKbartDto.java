@@ -5,9 +5,14 @@ import com.opencsv.bean.CsvBindByPosition;
 import fr.abes.kbart2kafka.utils.Utils;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 @Data
 @NoArgsConstructor
+@Slf4j
 public class LigneKbartDto {
 
     private int nbCurrentLines;
@@ -100,21 +105,34 @@ public class LigneKbartDto {
     @Override
     public String toString() {
         return "publication title : " + this.publication_title + " / publication_type : " + this.publication_type +
-                (this.online_identifier.isEmpty() ? "" : " / online_identifier : " + this.online_identifier) +
-                (this.print_identifier.isEmpty() ? "" : " / print_identifier : " + this.print_identifier);
+                (this.online_identifier == null || this.online_identifier.isEmpty() ? "" : " / online_identifier : " + this.online_identifier) +
+                (this.print_identifier == null || this.print_identifier.isEmpty() ? "" : " / print_identifier : " + this.print_identifier);
     }
 
     public String toHash() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String formatedDateMonographPublishedPrint = date_monograph_published_print;
+        String formatedDateMonographPublishedOnline = date_monograph_published_online;
+        try {
+            formatedDateMonographPublishedPrint = date_monograph_published_print == null || date_monograph_published_print.isEmpty() ? "" : sdf.parse(date_monograph_published_print).toString();
+            formatedDateMonographPublishedOnline = date_monograph_published_online == null || date_monograph_published_online.isEmpty() ? "" : sdf.parse(date_monograph_published_online).toString();
+        } catch (ParseException e) {
+            log.debug("Warning lors de la conversion de la date, Skip du parsing: {}", e.getMessage());
+        }
+
+
+
         return Utils.computeHash(
                 publication_title,
                 print_identifier,
                 online_identifier,
                 title_url,
                 first_author,
-                title_id, publisher_name,
+                title_id,
+                publisher_name,
                 publication_type,
-                date_monograph_published_print,
-                date_monograph_published_online,
+                formatedDateMonographPublishedPrint,
+                formatedDateMonographPublishedOnline,
                 first_editor
         );
     }

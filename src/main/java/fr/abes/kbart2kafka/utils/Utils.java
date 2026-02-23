@@ -12,8 +12,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Utils {
 
@@ -146,18 +149,20 @@ public class Utils {
             String dateMonographPublishedOnline,
             String firstEditor
     ) {
-        String hash = publicationTitle
-                + printIdentifier
-                + onlineIdentifer
-                + titleUrl
-                + firstAuthor
-                + titleId
-                + publisherName
-                + publicationType
-                + dateMonographPublishedPrint
-                + dateMonographPublishedOnline
-                + firstEditor
-                ;
-        return DigestUtils.sha256Hex(hash);
+        return DigestUtils.sha256Hex(Stream.of(
+                        publicationTitle,
+                        printIdentifier,
+                        onlineIdentifer,
+                        titleUrl,
+                        firstAuthor,
+                        titleId,
+                        publisherName,
+                        publicationType,
+                        dateMonographPublishedPrint,
+                        dateMonographPublishedOnline,
+                        firstEditor
+                )
+                .map(s -> Objects.toString(s, ""))  // null → ""
+                .collect(Collectors.joining("|")));
     }
 }

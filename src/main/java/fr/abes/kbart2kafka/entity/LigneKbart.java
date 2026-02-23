@@ -1,12 +1,10 @@
 package fr.abes.kbart2kafka.entity;
 
-import fr.abes.kbart2kafka.utils.Utils;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
@@ -67,7 +65,7 @@ public class LigneKbart implements Serializable {
     private String precedeingPublicationTitleId;
     @Column(name = "ACCESS_TYPE")
     private String accessType;
-    @ManyToOne(targetEntity = ProviderPackage.class, cascade = CascadeType.REMOVE, optional = false)
+    @ManyToOne(targetEntity = ProviderPackage.class, optional = false)
     @JoinColumn(name = "ID_PROVIDER_PACKAGE", referencedColumnName = "ID_PROVIDER_PACKAGE")
     private ProviderPackage providerPackage;
     @Column(name = "BEST_PPN")
