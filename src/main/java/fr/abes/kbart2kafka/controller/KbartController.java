@@ -22,10 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -46,7 +43,7 @@ public class KbartController {
     }
 
     @PostMapping(value ={"/uploadFile/{fileName}/{isBestPpnComputed}", "/uploadFile/{fileName}"})
-    public void uploadFile( @PathVariable String fileName, @PathVariable Boolean isBestPpnComputed) {
+    public void uploadFile( @PathVariable String fileName, @PathVariable Optional<Boolean> isBestPpnComputed) {
         long startTime = System.currentTimeMillis();
         //	Contrôle de la présence d'un paramètre au lancement de Kbart2kafkaApplication
         if (fileName == null || fileName.isEmpty() ) {
@@ -61,7 +58,7 @@ public class KbartController {
                 checkExistingPackage(tsvFile.getName());
 
                 //todo reajuster pour la valeur par defaut de isBestPpnComputed
-                if(isBestPpnComputed == null || isBestPpnComputed) {
+                if(isBestPpnComputed.isEmpty() || isBestPpnComputed.get()) {
                     List<LigneKbartDto> lastLignesKbart = getLigneKbartFromLastExistingPackage(tsvFile);
                     Map<String, String> lastLignesKbartHash = HashMap.newHashMap(lastLignesKbart.size());
                     lastLignesKbart.forEach(ligneKbart -> {
