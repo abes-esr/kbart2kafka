@@ -85,7 +85,7 @@ public class FileService {
                 try {
                     CheckFiles.isValidUtf8(ligneKbart);
                     LigneKbartDto ligneKbartDto = constructDto(tsvElementsOnOneLine, cpt.get(), nbLignesFichier);
-                    if (lastLignesKbartHash.containsKey(ligneKbartDto.toHash())) {
+                    if ((ligneKbartDto.getBestPpn() == null || ligneKbartDto.getBestPpn().isEmpty()) && lastLignesKbartHash.containsKey(ligneKbartDto.toHash())) {
                         ligneKbartDto.setBestPpn(lastLignesKbartHash.get(ligneKbartDto.toHash()));
                     }
 
