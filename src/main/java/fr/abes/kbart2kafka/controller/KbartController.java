@@ -57,8 +57,7 @@ public class KbartController {
                 CheckFiles.verifyFile(tsvFile, kbartHeader);
                 checkExistingPackage(tsvFile.getName());
 
-                //todo reajuster pour la valeur par defaut de isBestPpnComputed
-                if(isBestPpnComputed.isEmpty() || isBestPpnComputed.get()) {
+                if(isBestPpnComputed.isPresent() && isBestPpnComputed.get()) {
                     List<LigneKbartDto> lastLignesKbart = getLigneKbartFromLastExistingPackage(tsvFile);
                     Map<String, String> lastLignesKbartHash = HashMap.newHashMap(lastLignesKbart.size());
                     lastLignesKbart.forEach(ligneKbart -> {
