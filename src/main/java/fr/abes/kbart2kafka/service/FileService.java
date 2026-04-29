@@ -106,7 +106,7 @@ public class FileService {
                 }));
             } else {
                 ThreadContext.put("package", fichier.getName());
-                throw new IllegalFileFormatException("Format du fichier incorrect");
+                throw new IllegalFileFormatException();
             }
         } catch (IOException ex) {
             ThreadContext.put("package", fichier.getName());
