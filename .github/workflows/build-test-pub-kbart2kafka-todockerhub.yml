@@ -39,6 +39,7 @@ jobs:
         id: push
         uses: docker/build-push-action@v7
         with:
+          context: .
           push: ${{ github.event_name != 'pull_request'  && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop' || startsWith(github.ref, 'refs/tags/')) }}
           target: kbart2kafka-image
           tags: ${{ steps.docker_tag_meta.outputs.tags }}
