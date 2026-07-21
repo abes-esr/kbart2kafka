@@ -36,11 +36,11 @@ class CheckFilesTest {
 
         this.file2 = new File("");
         IllegalFileFormatException erreur2 = Assertions.assertThrows(IllegalFileFormatException.class, () -> CheckFiles.isFileWithTSVExtension(file2));
-        Assertions.assertEquals("Le nom du fichier est vide", erreur2.getMessage());
+        Assertions.assertEquals("Format du fichier incorrect. Le nom du fichier est vide", erreur2.getMessage());
 
         this.file3 = new File("test2.csv");
         IllegalFileFormatException erreur3 = Assertions.assertThrows(IllegalFileFormatException.class, () -> CheckFiles.isFileWithTSVExtension(file3));
-        Assertions.assertEquals("le fichier n'est pas au format tsv", erreur3.getMessage());
+        Assertions.assertEquals("Format du fichier incorrect. le fichier n'est pas au format tsv", erreur3.getMessage());
     }
 
     @Test
@@ -54,7 +54,7 @@ class CheckFilesTest {
         for(String name : Lists.newArrayList("123", "test_1234-12-12.tsv", "test_test_134-12-12.tsv", "test_test_1344-12-12.tsvf", "test_test_1344-12-123.tsv", "test_test_test_test1_1234-12-12_force.tsv")) {
             this.file3 = new File(name);
             IllegalFileFormatException erreur2 = Assertions.assertThrows(IllegalFileFormatException.class, () -> CheckFiles.detectFileNameAndReturnIsBypass(file3));
-            Assertions.assertEquals("Le nom du fichier " + name + " n'est pas correct", erreur2.getMessage());
+            Assertions.assertEquals("Format du fichier incorrect. Le nom du fichier " + name + " n'est pas correct", erreur2.getMessage());
         }
     }
 
@@ -82,7 +82,7 @@ class CheckFilesTest {
         this.file2 = new File("test2.tsv");
         FileUtils.writeStringToFile(file2, "test;test;test", StandardCharsets.UTF_8, true);
         IllegalFileFormatException erreur = Assertions.assertThrows(IllegalFileFormatException.class, () -> CheckFiles.detectTabulations(file2));
-        Assertions.assertEquals("Le fichier ne contient pas de tabulation", erreur.getMessage());
+        Assertions.assertEquals("Format du fichier incorrect. Le fichier ne contient pas de tabulation", erreur.getMessage());
     }
 
     @Test
@@ -181,6 +181,6 @@ class CheckFilesTest {
         this.file2 = new File("test3_BYPASS_FORCE.tsv");
         FileUtils.writeStringToFile(file2, "test\ttest\ttest", StandardCharsets.UTF_8, true);
         IllegalFileFormatException erreur2 = Assertions.assertThrows(IllegalFileFormatException.class, () -> CheckFiles.detectFileNameAndReturnIsBypass(file2));
-        Assertions.assertEquals("Le nom du fichier test3_BYPASS_FORCE.tsv n'est pas correct", erreur2.getMessage());
+        Assertions.assertEquals("Format du fichier incorrect. Le nom du fichier test3_BYPASS_FORCE.tsv n'est pas correct", erreur2.getMessage());
     }
 }
