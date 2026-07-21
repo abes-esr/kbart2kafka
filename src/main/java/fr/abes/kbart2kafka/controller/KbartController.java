@@ -79,15 +79,18 @@ public class KbartController {
 
     @GetMapping(value = {"/file/{fileName}", "/file/{path}/{fileName}"})
     public ResponseEntity<?> getFile(@PathVariable(required = false) String path, @PathVariable String fileName) {
-        boolean isReport = ((path != null) && path.equals("report"));
+        boolean isAllowedSubdirectory = path != null
+                && (path.equals("report") || path.equals("bad"));
 
         if (fileName == null || fileName.isEmpty()) {
             return ResponseEntity.badRequest().body("Le paramètre fileName est vide.");
-        } else if ((path != null) && !path.equals("report")){
+        } else if (path != null && !isAllowedSubdirectory) {
             return ResponseEntity.badRequest().body("Le chemin est incorrect");
         }
         try {
-            File fichier = isReport ? new File(pathToKbart + path + File.separator + fileName) : new File(pathToKbart + fileName);
+            File fichier = isAllowedSubdirectory
+                    ? new File(pathToKbart + path + File.separator + fileName)
+                    : new File(pathToKbart + fileName);
 
             if (!fichier.exists()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Le fichier " + fileName + " est introuvable.");
